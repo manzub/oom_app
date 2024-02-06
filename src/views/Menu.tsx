@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { dateDiffInDays } from "../data/interval";
 
 const menus = [
   { title: "Downwind", path: "/downwind" },
@@ -16,18 +17,27 @@ function Menu({ appUser }: { appUser: AppUser }) {
   const [pages, setPages] = useState<any[]>([])
 
   // notifications
-  const [activeNotifications, setActionNotifications] = useState<AppUser["notifications"][]>([])
+  const [activeNotifications, setActiveNotifications] = useState<any[]>([])
 
   useEffect(() => {
-    if(appUser) {
-      if(appUser.notifications.length > 0) {
-        const activeNotis = appUser.notifications.map(noti_item => {
+    if (appUser) {
+      if (appUser.notifications.length > 0) {
+        const activeNotis: AppUser["notifications"] = []
+        appUser.notifications.forEach(noti_item => {
           // check active state and is_read status
           // map is_read = false and current day = next day
+          const noti_time = new Date(noti_item.created)
+          const today_time = new Date()
+          const diffDays = dateDiffInDays(noti_time, today_time)
+          if (diffDays > 0 && !noti_item.is_read) {
+            activeNotis.push(noti_item)
+          }
         })
+
+        setActiveNotifications(activeNotis)
       }
     }
-  }, [])
+  }, [appUser])
 
   const per_page = 3
   const indexes = Array.from({ length: menus.length / per_page }, (v, i) => i)
@@ -43,6 +53,7 @@ function Menu({ appUser }: { appUser: AppUser }) {
 
   return (
     <div>
+      <button>shake(bell)</button>
       <h1>Logo Here</h1>
       <p>You're right at oom.</p>
       <br />

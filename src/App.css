@@ -2,8 +2,11 @@
   min-width: 24rem;
   max-width: 24rem;
   height: 100vh;
+  overflow-y: hidden;
+  overflow-x: hidden;
   margin-right: auto;
   margin-left: auto;
   color: black;
   text-decoration: none;
+  background-color: #FBEBD1;
 }

@@ -26,7 +26,7 @@ function App() {
       </React.Fragment>}
       {!loading && <React.Fragment>
         <Routes>
-          <Route path='/' element={<Layout />}>
+          <Route path='/'>
             <Route index element={<Menu appUser={appUser} />} />
             <Route path='downwind' element={<Downwind />} />
             <Route path='clearyoursht' element={<ClearYourSht />} />
