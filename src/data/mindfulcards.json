@@ -1,0 +1,36 @@
+{
+  "mindfulcards": [
+    {
+      "title": "Compassionate Heart",
+      "activity": "Spend one minute writing all the thing you like about yourself. What are you most proud of?",
+      "action": "What are you most proud of?",
+      "action_type": "textinput",
+      "action_start": "inprogress",
+      "activity_len": 60
+    },
+    {
+      "title": "Self Love",
+      "activity": "Sit in a comfortable spot. For one minute send kind wishes to yourself.",
+      "action": "Send Kind Wishes to yourself.",
+      "action_type": "textinput",
+      "action_start": "inprogress",
+      "activity_len": 60
+    },
+    {
+      "title": "Graditude",
+      "activity": "Pick the name of a family member and for one minute write down all the reasons you are grateful for them.",
+      "action": "Pick a family member and write down reasons you are grateful for them.",
+      "action_type": "textinput",
+      "action_start": "inprogress",
+      "activity_len": 60
+    },
+    {
+      "title": "Mindful Movement",
+      "activity": "Walk across the room in slow motion. Try to be as slow as possible. How do you feel after you have stopped?",
+      "action": "How do you feel?",
+      "action_type": "textinput",
+      "action_start": "completed",
+      "activity_len": 60
+    }
+  ]
+}
