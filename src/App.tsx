@@ -3,7 +3,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Route, Routes } from 'react-router-dom';
 import Menu from './views/Menu';
-import Layout from './views/Layout';
 import NotFound from './views/NotFound';
 import Downwind from './views/Actions/Downwind';
 import ClearYourSht from './views/Actions/ClearYourSht';

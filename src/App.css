@@ -7,6 +7,39 @@
   margin-right: auto;
   margin-left: auto;
   color: black;
+  font-family: 'Open Sans';
   text-decoration: none;
   background-color: #FBEBD1;
+}
+
+.mainPage {
+  height: 100%;
+}
+
+.mainContent {
+  height: calc(100% - 54px);
+}
+
+.mainPage>.headerItem {
+  height: 54px;
+}
+
+.headerItem>.headerActions {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0px 5px;
+  height: 100%;
+}
+
+.headerActions>.headerItem__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.headerActions>.headerAction__item {
+  width: 57px;
+  height: 57px;
+  font-weight: bold;
+  font-size: 1.7rem;
 }

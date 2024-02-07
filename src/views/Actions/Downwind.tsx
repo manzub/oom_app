@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import data from "../../data/mindfulcards.json";
 import { useNavigate } from "react-router-dom";
 import { useTimer } from "../../data/timer";
+import HeaderItem from "../../components/HeaderItem";
 
 function Downwind() {
   const navigate = useNavigate()
@@ -100,39 +101,41 @@ function Downwind() {
   }, [completed])
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>close</button>
-      {quote && <React.Fragment>
-        <h2>{quote.title}</h2>
-        <p>{quote.activity}</p>
-      </React.Fragment>}
-      <button onClick={newSelection}>swap</button>
-      <br />
-      <p>{countdown_started && currentCount}</p>
-      <br />
-      {!countdown_started && <button className="start-button" onClick={handleCountdown}>start</button>}
-      {(countdown_started && running) && <button className="pause-button" onClick={pause}>pause</button>}
-      {(countdown_started && !running) && <button className="resume-button" onClick={start}>resume</button>}
-      {countdown_started && <button className="stop-button" onClick={handleCountdown}>stop</button>}
-      {countdown_started && <button className="reset-button" onClick={handleReset}>reset</button>}
-
-      {action_start === 'inprogress' && <React.Fragment>
-        {action_type === 'textinput' && <React.Fragment>
-          <h5>{quote.action}</h5>
-          <ul>{entries?.map((item, idx) => <li key={idx}>{item}</li>)}</ul>
-          <input
-            value={typing}
-            onChange={({ target }) => setTyping(target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Enter your message. Press enter for new entry" />
-          <button onClick={() => setActionStatus('completed')}>done</button>
+    <div className="mainPage">
+      <HeaderItem title="Downwind" />
+      <div className="mainContent">
+        {quote && <React.Fragment>
+          <h2>{quote.title}</h2>
+          <p>{quote.activity}</p>
         </React.Fragment>}
-      </React.Fragment>}
+        <button onClick={newSelection}>swap</button>
+        <br />
+        <p>{countdown_started && currentCount}</p>
+        <br />
+        {!countdown_started && <button className="start-button" onClick={handleCountdown}>start</button>}
+        {(countdown_started && running) && <button className="pause-button" onClick={pause}>pause</button>}
+        {(countdown_started && !running) && <button className="resume-button" onClick={start}>resume</button>}
+        {countdown_started && <button className="stop-button" onClick={handleCountdown}>stop</button>}
+        {countdown_started && <button className="reset-button" onClick={handleReset}>reset</button>}
 
-      {completed && <React.Fragment>
-        <h4>Great Job.</h4>
-        <span>Start another activity</span>
-      </React.Fragment>}
+        {action_start === 'inprogress' && <React.Fragment>
+          {action_type === 'textinput' && <React.Fragment>
+            <h5>{quote.action}</h5>
+            <ul>{entries?.map((item, idx) => <li key={idx}>{item}</li>)}</ul>
+            <input
+              value={typing}
+              onChange={({ target }) => setTyping(target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter your message. Press enter for new entry" />
+            <button onClick={() => setActionStatus('completed')}>done</button>
+          </React.Fragment>}
+        </React.Fragment>}
+
+        {completed && <React.Fragment>
+          <h4>Great Job.</h4>
+          <span>Start another activity</span>
+        </React.Fragment>}
+      </div>
     </div>
   )
 }
