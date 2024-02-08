@@ -13,7 +13,7 @@
       "activity": "Sit in a comfortable spot. For one minute send kind wishes to yourself.",
       "action": "Send Kind Wishes to yourself.",
       "action_type": "textinput",
-      "action_start": "inprogress",
+      "action_start": "after_timer",
       "activity_len": 60
     },
     {
@@ -29,7 +29,7 @@
       "activity": "Walk across the room in slow motion. Try to be as slow as possible. How do you feel after you have stopped?",
       "action": "How do you feel?",
       "action_type": "textinput",
-      "action_start": "completed",
+      "action_start": "after_timer",
       "activity_len": 60
     }
   ]

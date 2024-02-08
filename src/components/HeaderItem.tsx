@@ -18,13 +18,13 @@ export default function HeaderItem({ closeUrl, title, activeNotis }: { closeUrl?
   return (
     <div className="headerItem">
       <div className="headerActions">
-        {closeable ? <span onClick={closeItem} className="headerAction__item">
-          <CloseOutline width="55px" height="55px" color='#000' />
-        </span> : <span></span>}
-        <h1 className="headerItem__title">{title}</h1>
         {(activeNotis && activeNotis.length > 0) ? <button onClick={() => navigate("/more/notifications")} className="headerAction__item btn btn-default">
           <NotificationsSharp width="30px" height="30px" color='#000' shake />
         </button> : <span></span>}
+        <h1 className="headerItem__title">{title}</h1>
+        {closeable ? <span onClick={closeItem} className="headerAction__item">
+          <CloseOutline width="55px" height="55px" color='#000' />
+        </span> : <span></span>}
       </div>
     </div>
   )

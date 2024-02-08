@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import data from "../../data/mindfulcards.json";
-import { useNavigate } from "react-router-dom";
 import { useTimer } from "../../data/timer";
 import HeaderItem from "../../components/HeaderItem";
+import "./Downwind.css"
+import { PauseSharp, PlayBackSharp, PlaySharp, RefreshSharp, StopSharp } from "react-ionicons";
+import Affirmations from "../../components/Affirmations";
 
+// TODO: action state after popup
 function Downwind() {
-  const navigate = useNavigate()
 
   // quotes
   let mf_len = data.mindfulcards.length
@@ -60,6 +62,7 @@ function Downwind() {
   const currentCount = formatTime(seconds)
 
   // action start
+  const [showAffirm, setPopUpStatus] = useState(false)
   const [action_start, setActionStatus] = useState<string>()
   const [entries, setEntry] = useState<string[]>([])
   const [typing, setTyping] = useState('')
@@ -96,27 +99,48 @@ function Downwind() {
 
   useEffect(() => {
     if (completed) {
+      if(action_start === "completed") {
+        setPopUpStatus(true)
+      }
       setCountdownStatus(false)
     }
-  }, [completed])
+  }, [completed, action_start])
 
   return (
     <div className="mainPage">
       <HeaderItem title="Downwind" />
       <div className="mainContent">
-        {quote && <React.Fragment>
-          <h2>{quote.title}</h2>
-          <p>{quote.activity}</p>
-        </React.Fragment>}
-        <button onClick={newSelection}>swap</button>
-        <br />
-        <p>{countdown_started && currentCount}</p>
-        <br />
-        {!countdown_started && <button className="start-button" onClick={handleCountdown}>start</button>}
-        {(countdown_started && running) && <button className="pause-button" onClick={pause}>pause</button>}
-        {(countdown_started && !running) && <button className="resume-button" onClick={start}>resume</button>}
-        {countdown_started && <button className="stop-button" onClick={handleCountdown}>stop</button>}
-        {countdown_started && <button className="reset-button" onClick={handleReset}>reset</button>}
+        {quote && <div className="mainContent__flex">
+          <div className="content__body gap-4">
+            <h3 className="downwind__title">{quote.title}</h3>
+            <p className="downwind__desc text-center">{quote.activity}</p>
+            <p style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{countdown_started && currentCount}</p>
+          </div>
+          <div className="content__actions">
+            {!countdown_started ? <button onClick={newSelection} className="btn">
+              <RefreshSharp title="Swap Card" color="#DD6AB3" width="54px" height="54px" />
+            </button> : <React.Fragment>
+              {(countdown_started && running) && <button onClick={pause} className="btn">
+                <PauseSharp title="Pause" color="#DD6AB3" width="54px" height="54px" />
+              </button>}
+
+              {(countdown_started && !running) && <button onClick={start} className="btn">
+                <PlaySharp title="Resume" color="#DD6AB3" width="54px" height="54px" />
+              </button>}
+            </React.Fragment>}
+            <div onClick={handleCountdown}>
+              {!countdown_started ? <button className="btn">
+                <PlaySharp title="Start" color="#DD6AB3" width="54px" height="54px" />
+              </button> : <button className="btn">
+                <StopSharp title="Stop" color="#DD6AB3" width="54px" height="54px" />
+              </button>}
+            </div>
+            {countdown_started && <button className="btn reset-button" onClick={handleReset}>
+              <PlayBackSharp title="Reset Timer" color="#DD6AB3" width="54px" height="54px" />
+            </button>}
+          </div>
+        </div>}
+
 
         {action_start === 'inprogress' && <React.Fragment>
           {action_type === 'textinput' && <React.Fragment>
@@ -131,10 +155,11 @@ function Downwind() {
           </React.Fragment>}
         </React.Fragment>}
 
-        {completed && <React.Fragment>
-          <h4>Great Job.</h4>
-          <span>Start another activity</span>
-        </React.Fragment>}
+        {showAffirm && <Affirmations
+          emoji="🥳💨"
+          title="Great Job"
+          footerText="Start another activity?"
+          popOut={() => setPopUpStatus(false)} />}
       </div>
     </div>
   )

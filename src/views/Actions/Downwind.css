@@ -1,0 +1,33 @@
+.mainContent__flex {
+  display: flex;
+  height: calc(100% - 30%);
+  padding: 0px 40px;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content__body {
+  /* flex: 2; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: calc(60% - 120px);
+  height: 60%;
+  width: 100%;
+}
+
+.content__actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.downwind__title {
+  font-size: 2.5rem;
+  font-weight: 100;
+  text-align: center;
+}
