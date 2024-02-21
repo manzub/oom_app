@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react"
+import HeaderItem from "../../components/HeaderItem";
 // import { useLongPress } from "use-long-press";
+import "./ClearYourSht.css"
+import { CheckmarkOutline, CloseOutline } from "react-ionicons";
+import GameCenter from "../../components/GameCenter";
 
 function ClearYourSht() {
-  const navigate = useNavigate();
 
   const [running, setRunning] = useState(true);
   const [conversation, setConversation] = useState<{ message: string, needs_action?: boolean }[]>([])
   const [typing, setTyping] = useState('')
   const [waiting_reply, setWatingStatus] = useState(true)
+
+  const inputElem = useCallback((inputElement: any) => {
+    if (inputElement) {
+      inputElement.focus();
+    }
+  }, []);
 
 
   function keyDwonHandler(event: React.KeyboardEvent) {
@@ -34,39 +42,7 @@ function ClearYourSht() {
   }
 
   const [game_start, setGameStart] = useState(false);
-  // create array from 8 items
-  let arr = Array.from(Array(8).keys()).map(x => `${x++}`);
-  const [sht, updateList] = useState(arr)
-  const [to_delete, setToDelete] = useState(-1);
-  // const [drag_start, setDragStatus] = useState(false)
-
-  const pop = (index: number) => {
-    const items = sht
-    items.length === 0 && updateList([])
-
-    if (items.length !== 0) {
-      items.splice(index, 1)
-      updateList(items)
-    }
-
-    setToDelete(-1)
-    console.log('popped')
-  }
-
-  // const bind = useLongPress(() => (!drag_start ? pop(to_delete) : undefined), { threshold: 1000, cancelOnMovement: 10 });
-
-  function onDragStart(index: number) {
-    // setDragStatus(true)
-    setToDelete(index)
-  }
-  function onDragOver(e: React.DragEvent) {
-    e.preventDefault();
-  }
-  function onDrop(e: React.DragEvent) {
-    // setDragStatus(false)
-    // console.log('dropped', items[to_delete])
-    pop(to_delete)
-  }
+  
 
   useEffect(() => {
     if (running) {
@@ -82,33 +58,42 @@ function ClearYourSht() {
   }, [running, conversation, waiting_reply])
 
   return (
-    <div>
-      <button onClick={() => navigate(-1)}>close</button>
-      {!game_start && <React.Fragment>
-        <h3>Clear your sh*t</h3>
-        <br />
-        <ul>
-          {conversation.map((item, idx) => <React.Fragment key={idx}>
-            <li>{item.message}</li>
-            {item.needs_action && <div>
-              <button onClick={() => continueTopic(idx)}>yes</button>
-              <button onClick={() => endTopic(idx)}>x</button>
-            </div>}
-          </React.Fragment>)}
-          {waiting_reply && <li><input value={typing} onChange={({ target }) => setTyping(target.value)} autoFocus type="text" onKeyDown={keyDwonHandler} placeholder="enter your message" /></li>}
-          {waiting_reply && <li>...</li>}
-        </ul>
-      </React.Fragment>}
-      {game_start && <React.Fragment>
-        <div style={{ marginTop: 5 }}>
-          {sht.map((item, idx) => <p
-            key={item}
-            onDragStart={() => onDragStart(idx)}
-            draggable>trash</p>)}
-          <p onDrop={onDrop} onDragOver={onDragOver}>bin</p>
+    <div className="mainPage" style={{ overflowY: "auto" }}>
+      <HeaderItem title="" />
+      <div className="mainContent">
+        <div className="p-4">
+          {!game_start && <React.Fragment>
+            <h3 className="text-center fw-bold" style={{ fontSize: "2rem" }}>Clear your sh*t</h3>
+            <div className="messages">
+              {conversation.map((item, idx) => <React.Fragment key={idx}>
+                <div className={`bubble ${(idx % 2) === 0 ? "left" : "right"}`}>{item.message}</div>
+                {item.needs_action && <div className="needs_action">
+                  <button onClick={() => continueTopic(idx)} className="btn">
+                    <CheckmarkOutline />
+                  </button>
+                  <button onClick={() => endTopic(idx)} className="btn">
+                    <CloseOutline />
+                  </button>
+                </div>}
+              </React.Fragment>)}
+              {waiting_reply && <div className="bubble right">
+                <input
+                  type="text"
+                  ref={inputElem}
+                  className="message_input"
+                  value={typing}
+                  onChange={(event) => setTyping(event.target.value)}
+                  onKeyDown={keyDwonHandler}
+                  placeholder="Enter your message..." />
+              </div>}
+              {waiting_reply && <div className="bubble left">...</div>}
+            </div>
+          </React.Fragment>}
+          {game_start && <React.Fragment>
+            <GameCenter />
+          </React.Fragment>}
         </div>
-        {(game_start && sht.length === 0) && <p>Good Job</p>}
-      </React.Fragment>}
+      </div>
     </div>
   )
 }

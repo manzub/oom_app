@@ -1,12 +1,15 @@
 import { CloseSharp, HomeOutline } from "react-ionicons"
 import "./Affirmations.css"
 import { useNavigate } from "react-router-dom"
+import classNames from "classnames"
 
-export default function Affirmations({ emoji, title, footerText, popOut }: { emoji: string, title: string, footerText: string, popOut: Function }) {
+// TODO: affirmation color
+
+export default function Affirmations({ bgColor, emoji, title, textSize, footerText, popOut }: { bgColor: string, emoji: string, title: string, textSize?: string, footerText: string, popOut: Function }) {
   const navigate = useNavigate()
 
   return (
-    <div className="affirmations" style={{ backgroundColor: "#EC5ABF" }}>
+    <div className="affirmations" style={{ backgroundColor: bgColor }}>
       <div className="mainContent">
         <div className="headerItem">
           <div className="headerActions">
@@ -22,7 +25,8 @@ export default function Affirmations({ emoji, title, footerText, popOut }: { emo
           <div className="contentMain">
             <div className="contentMain__items">
               <span className="contentMain__emoji">{emoji}</span>
-              <h2 className="contentMain__title">{title}</h2>
+              <h2 className={classNames("contentMain__title", { "md": textSize })}>{title}</h2>
+              <p></p>
               <div className="contentMain__action">
                 <button onClick={() => navigate("/")} className="btn btn-default d-flex gap-2">
                   <HomeOutline />

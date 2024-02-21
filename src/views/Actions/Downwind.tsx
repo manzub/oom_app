@@ -5,6 +5,7 @@ import HeaderItem from "../../components/HeaderItem";
 import "./Downwind.css"
 import { PauseSharp, PlayBackSharp, PlaySharp, RefreshSharp, StopSharp } from "react-ionicons";
 import Affirmations from "../../components/Affirmations";
+import ActionItem from "../../components/ActionItem";
 
 // TODO: action state after popup
 function Downwind() {
@@ -64,16 +65,7 @@ function Downwind() {
   // action start
   const [showAffirm, setPopUpStatus] = useState(false)
   const [action_start, setActionStatus] = useState<string>()
-  const [entries, setEntry] = useState<string[]>([])
-  const [typing, setTyping] = useState('')
   const action_type = quote.action_type
-
-  function handleKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Enter') {
-      setEntry([...entries, typing])
-      setTyping('')
-    }
-  }
 
   useEffect(() => { // only start action on timer and q.action_start param
     // if action hasn't started yet
@@ -86,12 +78,12 @@ function Downwind() {
             setActionStatus('inprogress')
           }, 2000);
         }
-      } else if (quote.action_start === 'completed') {
+      } else if (quote.action_start === 'after_timer') {
         if (completed) {
           // delay for 2 seconds [enough time for completed message to display]
           setTimeout(() => {
             setActionStatus('inprogress')
-          }, 2000);
+          }, 1000);
         }
       }
     }
@@ -99,7 +91,7 @@ function Downwind() {
 
   useEffect(() => {
     if (completed) {
-      if(action_start === "completed") {
+      if (action_start === "completed") {
         setPopUpStatus(true)
       }
       setCountdownStatus(false)
@@ -144,19 +136,13 @@ function Downwind() {
 
         {action_start === 'inprogress' && <React.Fragment>
           {action_type === 'textinput' && <React.Fragment>
-            <h5>{quote.action}</h5>
-            <ul>{entries?.map((item, idx) => <li key={idx}>{item}</li>)}</ul>
-            <input
-              value={typing}
-              onChange={({ target }) => setTyping(target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Enter your message. Press enter for new entry" />
-            <button onClick={() => setActionStatus('completed')}>done</button>
+            <ActionItem activity={quote.action} popOut={() => setActionStatus('completed')} />
           </React.Fragment>}
         </React.Fragment>}
 
         {showAffirm && <Affirmations
           emoji="🥳💨"
+          bgColor="#EC5ABF"
           title="Great Job"
           footerText="Start another activity?"
           popOut={() => setPopUpStatus(false)} />}

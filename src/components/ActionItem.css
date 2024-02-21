@@ -1,4 +1,4 @@
-.affirmations {
+.actionItems {
   position: fixed; 
   z-index: 1;
   left: 0;
@@ -10,51 +10,45 @@
   background-color: rgba(0,0,0,0.4);
 }
 
-.contentBody {
+
+.contentB {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: space-between;
   width: 100%;
   height: 100%;
 }
 
-.contentMain {
+.contentM {
   flex: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
+  justify-content: space-between;
+  padding: 20px;
   height: 100%;
   width: 100%;
 }
 
-.contentMain__items {
+.input__textarea, .input__textarea:focus {
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+  border-left: 3px solid #fff;
+}
+
+.actionItem__controls {
+  width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: end;
-  height: 100%;
-  margin-bottom: 50px;
+  justify-content: center;
 }
 
-.contentMain__emoji {
-  font-size: 5.5em;
-}
-
-.contentMain__title {
-  font-size: 3em;
-  font-weight: bold;
-  text-align: center;
-  width: 80%;
-}
-
-.contentMain__title.md {
-  font-size: 2.7rem;
-}
-
-.contentFooter {
+.contentF {
   flex: 1;
   display: flex;
+  width: 100%;
   flex-direction: column-reverse;
   height: calc(100% - 60%);
   text-transform: "uppercase";

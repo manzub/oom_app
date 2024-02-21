@@ -40,6 +40,7 @@ function Menu({ appUser }: { appUser: AppUser }) {
           const noti_time = new Date(noti_item.created)
           const today_time = new Date()
           const diffDays = dateDiffInDays(noti_time, today_time)
+          
           if (diffDays > 0 && !noti_item.is_read) {
             activeNotis.push(noti_item)
           }
@@ -79,7 +80,7 @@ function Menu({ appUser }: { appUser: AppUser }) {
           <div className="menuBottomItems">
             <NavLink to={"/more/notifications"}>
               <p className="noti__menuLink">
-                Notifications.... {appUser?.notifications.length}
+                Notifications.... {activeNotifications.length}
                 <span className="text-danger">!</span>
               </p>
             </NavLink>
