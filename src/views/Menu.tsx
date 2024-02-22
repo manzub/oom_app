@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { dateDiffInDays } from "../data/interval";
 import "./Menu.css"
 import logo from "../logo.png";
-import { ArrowDownOutline, ArrowUpOutline, ChevronForwardOutline } from "react-ionicons";
 import HeaderItem from "../components/HeaderItem";
+import MenuNav from "../components/MenuNav";
 
 const menus = [
   { title: "Downwind", color: "#EC5ABF", emoticon: "💨", path: "/downwind" },
@@ -16,17 +16,6 @@ const menus = [
 ]
 
 function Menu({ appUser }: { appUser: AppUser }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [lastIndex, setLastIndex] = useState<number>()
-  const [pages, setPages] = useState<any[]>([])
-
-  const navigate = useNavigate()
-
-  const setNextIndex = (index: number) => {
-    setCurrentIndex(index)
-    setLastIndex(index - 1)
-  }
-
   // notifications
   const [activeNotifications, setActiveNotifications] = useState<any[]>([])
 
@@ -51,18 +40,6 @@ function Menu({ appUser }: { appUser: AppUser }) {
     }
   }, [appUser])
 
-  const per_page = 3
-  const indexes = Array.from({ length: menus.length / per_page }, (v, i) => i)
-
-  useEffect(() => {
-    if (currentIndex !== lastIndex) {
-      const pages = menus.slice(per_page * currentIndex, per_page * (currentIndex + 1))
-      setPages(pages)
-      // setLastIndex(currentIndex)
-    }
-  }, [currentIndex, lastIndex])
-
-
   return (
     <div className="mainPage">
       <HeaderItem title="Home" activeNotis={activeNotifications} />
@@ -84,38 +61,7 @@ function Menu({ appUser }: { appUser: AppUser }) {
                 <span className="text-danger">!</span>
               </p>
             </NavLink>
-            <div className="menus">
-              <div className="menu__nav">
-                {pages.map((item, idx) => <React.Fragment key={idx}>
-                  <div onClick={() => navigate(item.path)} style={{ backgroundColor: item.color }} className="menu__navItem">
-                    <div className="d-flex gap-3 justify-content-center" style={{ alignItems: "center" }}>
-                      <span style={{ fontSize: '3rem' }}>{item?.emoticon}</span>
-                      <h3 style={{ fontWeight: 900, fontSize: '1.7rem' }}><strong>{item.title}</strong></h3>
-                    </div>
-                    <ChevronForwardOutline
-                      color='#000'
-                      height="40px"
-                      width="40px"
-                    />
-                  </div>
-                </React.Fragment>)}
-              </div>
-              <div className="menu__actions">
-                {currentIndex === indexes[indexes.length - 1] ? <React.Fragment>
-                  <button onClick={() => setNextIndex(currentIndex - 1)} className="menu__nextAction btn">
-                    <ArrowUpOutline
-                      beat height="50px" width="50px" color="#000"
-                      style={{ backgroundColor: 'transparent' }} />
-                  </button>
-                </React.Fragment> : <React.Fragment>
-                  <button onClick={() => setNextIndex(currentIndex + 1)} className="menu__nextAction btn">
-                    <ArrowDownOutline
-                      beat height="50px" width="50px" color="#000"
-                      style={{ backgroundColor: 'transparent' }} />
-                  </button>
-                </React.Fragment>}
-              </div>
-            </div>
+            <MenuNav menus={menus} has_action={true} />
           </div>
         </div>
       </div>
