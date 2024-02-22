@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom"
 
-export default function Conversations() {
+export default function Conversations({ user }: { user: AppUser }) {
   const navigate = useNavigate();
 
 
-  return(
+  return (
     <div>
       <button onClick={() => navigate(-1)}>close</button>
-      <p>saved conversations.... 0</p>
+      <p>saved conversations.... {user.conversations?.length}</p>
       <button onClick={() => navigate('new_conversation')}>start new</button>
     </div>
   )

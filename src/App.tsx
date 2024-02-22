@@ -31,8 +31,8 @@ function App() {
             <Route path='clearyoursht' element={<ClearYourSht />} />
             <Route path='forfutureself' element={<ForFutureSelf appUser={appUser} updateListener={updateUserListener} />} />
             <Route path='/conversations'>
-              <Route index element={<Conversations />} />
-              <Route path='new_conversation' element={<NewConversation />} />
+              <Route index element={<Conversations user={appUser} />} />
+              <Route path='new_conversation/:userid' element={<NewConversation />} />
             </Route>
             <Route path='pawsnreflect' element={<PawsNReflect />} />
             <Route path='journals' element={<Journals />} />
