@@ -36,7 +36,7 @@ export default function Affirmations({ bgColor, emoji, title, textSize, footerTe
             </div>
           </div>
           <div className="contentFooter">
-            <p>{footerText}</p>
+            <p className="text-uppercase">{footerText}</p>
           </div>
         </div>
       </div>

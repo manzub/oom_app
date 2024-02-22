@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { TrashOutline } from "react-ionicons";
 import Affirmations from "./Affirmations";
+import { useNavigate } from "react-router-dom";
 
 export default function GameCenter() {
+  const navigate = useNavigate()
 
   const [completed, setCompleted] = useState(false)
 
@@ -22,7 +24,11 @@ export default function GameCenter() {
     }
 
     setToDelete(-1)
-    console.log('popped')
+    console.log('popped', sht.length)
+
+    if(items.length == 0) {
+      setCompleted(true)
+    }
   }
 
   // const bind = useLongPress(() => (!drag_start ? pop(to_delete) : undefined), { threshold: 1000, cancelOnMovement: 10 });
@@ -36,17 +42,20 @@ export default function GameCenter() {
   }
   function onDrop(e) {
     // setDragStatus(false)
-    // console.log('dropped', items[to_delete])
+    // console.log('dropped', sht[to_delete])
     pop(to_delete)
   }
 
   useEffect(() => {
-    
+    // let parent = document.querySelector(".gameItems")
+    let trashItems = document.querySelectorAll(".trashItem")
+    for(let i = 0; i < trashItems.length; i++) { //width in str
+      let pos_x = (Math.random() * (330 - 127)).toFixed() //parent.width - trashitem.width
+      let pos_y = (Math.random() * (400 - 121)).toFixed() //parent.height - trashitem.height
+      trashItems[i].style.left = `${pos_x - 20}px`
+      trashItems[i].style.top = `${pos_y - 20}px`
+    }
   }, [])
-
-  useEffect(() => {
-    sht.length === 0 && setCompleted(true)
-  }, [sht])
 
   const randIds = ["a", "b", "c", "d", "e"]
 
@@ -76,7 +85,7 @@ export default function GameCenter() {
         bgColor="#EC5ABF"
         title="Good Job"
         footerText="admittance is the first step to healing"
-        popOut={() => setCompleted(false)} />}
+        popOut={() => navigate(-1)} />}
     </div>
   )
 }
