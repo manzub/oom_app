@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import GifItem from "../../components/GifItem"
+import HeaderItem from "../../components/HeaderItem"
 
 export default function PawsNReflect() {
   const navigate = useNavigate()
@@ -41,10 +42,12 @@ export default function PawsNReflect() {
   }, [])
 
   return (
-    <div>
-      <h5><button onClick={() => navigate(-1)}>close</button> Paws N Reflect</h5>
-      <div className="gifsnvideos" style={{ display: 'flex', height: '500px', flexDirection: 'column' }}>
-        {gifs.map((item, idx) => <GifItem gifItem={item} key={idx} />)}
+    <div className="mainPage">
+      <HeaderItem title="Paws N Reflect" />
+      <div className="mainContent">
+        <div className="gifsnvideos p-2 row">
+          {gifs.map((item, idx) => <GifItem gifItem={item} key={idx} />)}
+        </div>
       </div>
     </div>
   )

@@ -10,10 +10,9 @@ import ForFutureSelf from './views/Actions/ForFutureSelf';
 import useAppUser from './data/use-app-user';
 import Loading from './views/LoadingComp';
 import Conversations from './views/Actions/conversations/Home';
-import NewConversation from './views/Actions/conversations/NewConversation';
+import Conversation from './views/Actions/conversations/Conversation';
 import PawsNReflect from './views/Actions/PawsNReflect';
 import Journals from './views/Actions/Journals';
-import ConversationItem from './views/Actions/conversations/SingleItem';
 
 function App() {
 
@@ -33,8 +32,7 @@ function App() {
             <Route path='forfutureself' element={<ForFutureSelf appUser={appUser} updateListener={updateUserListener} />} />
             <Route path='/conversations'>
               <Route index element={<Conversations user={appUser} />} />
-              <Route path='conversation/:convid' element={<ConversationItem />} />
-              <Route path='new_conversation/:userid' element={<NewConversation />} />
+              <Route path='conversation/:userid/:convId' element={<Conversation />} />
             </Route>
             <Route path='pawsnreflect' element={<PawsNReflect />} />
             <Route path='journals' element={<Journals />} />

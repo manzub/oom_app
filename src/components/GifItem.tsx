@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { ArrowBackCircleOutline, ArrowForwardCircleOutline } from "react-ionicons"
 
 export default function GifItem({ gifItem }: { gifItem: any[] }) {
   const [currentItem, setCurrentItem] = useState(gifItem[0])
@@ -14,21 +15,32 @@ export default function GifItem({ gifItem }: { gifItem: any[] }) {
     setLastIndex(index - 1)
   }
 
-  // TODO: pause/play image and gif [use image/gif].
-  // TODO: prev/next duration.
-  // TODO:: use height dims from gifitem
   // current item and next item state
   const indexes = Array.from({ length: gifItem.length }, (v, k) => k)
 
   return (
-    <div className="gifcontainer" style={{ backgroundColor: '#e3e3e3', flex: 1 }}>
-      {<React.Fragment>
-        <img src={currentItem.gif} width="200px" height="150px" alt="" />
-        <p>{currentItem.title}</p>
-        <button>paws</button>
-      </React.Fragment>}
-      {lastIndex >= indexes[0] && <button onClick={() => setNextIndex(currentIndex - 1)}>prev</button>}
-      {currentIndex < indexes[indexes.length - 1] && <button onClick={() => setNextIndex(currentIndex + 1)}>next</button>}
+    <div className="gifcontainer col-12" style={{ width: '100%' }}>
+      <div className="d-flex align-items-center justify-content-center">
+        <div className="gifItem d-block" style={{ position: 'relative' }}>
+          <div className="controls" style={{ position: 'absolute', height: '100%', width: '100%' }}>
+            <div className="d-flex align-items-center justify-content-between" style={{ height: '100%', width: '100%' }}>
+              <div className="btnItem" style={{ height: '100%' }}>
+                {lastIndex >= indexes[0] && <button className="btn" style={{ height: '100%' }} onClick={() => setNextIndex(currentIndex - 1)}>
+                  <ArrowBackCircleOutline color="#fff" width="34px" height="34px" />
+                </button>}
+              </div>
+              <div className="btnItem" style={{ height: '100%' }}>
+                {currentIndex < indexes[indexes.length - 1] && <button className="btn" style={{ height: '100%' }} onClick={() => setNextIndex(currentIndex + 1)}>
+                  <ArrowForwardCircleOutline color="#fff" width="34px" height="34px" />
+                </button>}
+              </div>
+            </div>
+          </div>
+          <img src={currentItem.gif} width="300px" height="160px" alt="" />
+
+        </div>
+      </div>
+      <p className="text-center" style={{ fontSize: '10px' }}>{currentItem.title}</p>
     </div>
   )
 }

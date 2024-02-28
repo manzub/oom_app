@@ -1,0 +1,8 @@
+.chat-form::after, .chat-form:focus, .chat-form:active {
+  text-decoration: none;
+  outline: none;
+}
+
+.sv-conv-item:hover {
+  background-color:'#f9e4c2'
+}
