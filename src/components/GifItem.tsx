@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { ArrowBackCircleOutline, ArrowForwardCircleOutline } from "react-ionicons"
 
-export default function GifItem({ gifItem }: { gifItem: any[] }) {
+export default function GifItem({ gifItem, completedSet }: { gifItem: any[], completedSet: Function }) {
   const [currentItem, setCurrentItem] = useState(gifItem[0])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [lastIndex, setLastIndex] = useState(-1)
@@ -15,8 +15,17 @@ export default function GifItem({ gifItem }: { gifItem: any[] }) {
     setLastIndex(index - 1)
   }
 
+  // load next
   // current item and next item state
   const indexes = Array.from({ length: gifItem.length }, (v, k) => k)
+
+  // completed set
+  useEffect(() => {
+    if (currentIndex === indexes[indexes.length - 1]) {
+      completedSet(true)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, indexes])
 
   return (
     <div className="gifcontainer col-12" style={{ width: '100%' }}>
@@ -24,12 +33,12 @@ export default function GifItem({ gifItem }: { gifItem: any[] }) {
         <div className="gifItem d-block" style={{ position: 'relative' }}>
           <div className="controls" style={{ position: 'absolute', height: '100%', width: '100%' }}>
             <div className="d-flex align-items-center justify-content-between" style={{ height: '100%', width: '100%' }}>
-              <div className="btnItem" style={{ height: '100%' }}>
+              <div className="btnItem" style={{ height: '100%', backgroundColor: 'rgb(127 127 127 / 41%)' }}>
                 {lastIndex >= indexes[0] && <button className="btn" style={{ height: '100%' }} onClick={() => setNextIndex(currentIndex - 1)}>
                   <ArrowBackCircleOutline color="#fff" width="34px" height="34px" />
                 </button>}
               </div>
-              <div className="btnItem" style={{ height: '100%' }}>
+              <div className="btnItem" style={{ height: '100%', backgroundColor: 'rgb(127 127 127 / 41%)' }}>
                 {currentIndex < indexes[indexes.length - 1] && <button className="btn" style={{ height: '100%' }} onClick={() => setNextIndex(currentIndex + 1)}>
                   <ArrowForwardCircleOutline color="#fff" width="34px" height="34px" />
                 </button>}

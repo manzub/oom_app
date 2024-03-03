@@ -9,6 +9,6 @@ type MindfulQuote = {
 
 type AppUser = {
   userId: string,
-  notifications: { message: string, is_read: boolean, created: string }[],
+  notifications: { notiId: string, message: string, is_read: boolean, created: string }[],
   conversations: { convId: string, messages: string[] }[]
 }

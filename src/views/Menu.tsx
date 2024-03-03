@@ -57,7 +57,7 @@ function Menu({ appUser }: { appUser: AppUser }) {
           <div className="menuBottomItems">
             <NavLink to={"/more/notifications"}>
               <p className="noti__menuLink">
-                Notifications.... {activeNotifications.length}
+                Notifications.... {appUser.notifications.length}
                 <span className="text-danger">!</span>
               </p>
             </NavLink>
