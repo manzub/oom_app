@@ -3,8 +3,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap'
 import { Route, Routes } from 'react-router-dom';
-import $ from 'jquery';
-import Popper from 'popper.js';
 import Menu from './views/Menu';
 import NotFound from './views/NotFound';
 import Downwind from './views/Actions/Downwind';

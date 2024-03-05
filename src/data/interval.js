@@ -17,3 +17,20 @@ export function dateDiffInDays(a, b) {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
+
+export async function postData(url = "", data = {}, headers = {}) {
+  const response = await fetch(url, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "omit",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify(data)
+  })
+  return response.json()
+}
