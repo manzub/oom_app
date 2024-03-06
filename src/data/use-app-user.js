@@ -67,5 +67,5 @@ export default function useAppUser() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
-  return { loading, appUser, access_token, updateUserListener }
+  return { loading, appUser, access_token: access_token.access_token, updateUserListener }
 }

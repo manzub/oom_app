@@ -18,7 +18,6 @@ import Notifications from './views/Notifications';
 import More from './views/More';
 
 function App() {
-  // TODO: load mindful cards from db and save in localstorage
   const [appLoaded, setAppLoaded] = useState(false)
   const { loading, appUser, updateUserListener } = useAppUser();
 
