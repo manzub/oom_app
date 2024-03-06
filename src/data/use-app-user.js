@@ -32,15 +32,20 @@ export default function useAppUser() {
   }
 
   useEffect(() => {
-    if (userStateChanged) { // get latest user from database
-      console.log('state changed')
-      // TODO: get new token after success
-      fetch(`${backendUrl}/get_user/${appUser?.userId}`).then(res => res.json()).then(data => {
-        setAppUser(data.user)
-        localStorage.setItem(appUserKey, JSON.stringify(data.user))
-        updateUserListener(false)
-      })
+    async function updateUser() {
+      if (userStateChanged) { // get latest user from database
+        console.log('state changed')
+        const response = await fetch(`${backendUrl}/get_user/${appUser?.userId}`)
+        const data = await response.json()
+
+        if (data.status === "success") {
+          setAppUser(data.data)
+          localStorage.setItem(appUserKey, JSON.stringify(data.data))
+          updateUserListener(false)
+        }
+      }
     }
+    updateUser()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userStateChanged])
 
@@ -49,6 +54,9 @@ export default function useAppUser() {
       if (!appUser || appUser === null) {
         setupOOMUser().then(_ => {
           setLoadingState(true)
+          setTimeout(() => {
+            window.location.reload()
+          }, 2000);
         })
       } else {
         loading && setLoadingState(!loading);
@@ -56,7 +64,8 @@ export default function useAppUser() {
     }
 
     return () => listener()
-  }, [appUser, loading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading])
 
   return { loading, appUser, access_token, updateUserListener }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap'
@@ -19,14 +19,21 @@ import More from './views/More';
 
 function App() {
   // TODO: load mindful cards from db and save in localstorage
+  const [appLoaded, setAppLoaded] = useState(false)
   const { loading, appUser, updateUserListener } = useAppUser();
+
+  useEffect(() => {
+    if (!loading) {
+      setAppLoaded(true)
+    }
+  }, [loading])
 
   return (
     <div className="App">
-      {loading && <React.Fragment>
+      {!appLoaded && <React.Fragment>
         <Loading />
       </React.Fragment>}
-      {!loading && <React.Fragment>
+      {appLoaded && <React.Fragment>
         <Routes>
           <Route path='/'>
             <Route index element={<Menu appUser={appUser} />} />

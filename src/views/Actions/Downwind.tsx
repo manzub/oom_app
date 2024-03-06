@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import data from "../../data/mindfulcards.json";
 import { useTimer } from "../../data/timer";
 import HeaderItem from "../../components/HeaderItem";
 import "./Downwind.css"
@@ -8,19 +7,19 @@ import Affirmations from "../../components/Affirmations";
 import ActionItem from "../../components/ActionItem";
 
 // TODO: action state after popup
-function Downwind() {
+// TODO: loading state for every comp
+export default function Downwind() {
 
+  const [mindfulcards, setMindfulcards] = useState<MindfulQuote[]>([])
   // quotes
-  let mf_len = data.mindfulcards.length
-  let randIndex = Math.floor(Math.random() * mf_len)
-  const [quote, setQuote] = useState<MindfulQuote>(data.mindfulcards[randIndex]);
-  const [currentSelection, setIndex] = useState<number>(randIndex);
+  const [quote, setQuote] = useState<MindfulQuote>({ title: '', activity: '', action: '', action_type: '', action_start: '', activity_len: 10 });
+  const [currentSelection, setIndex] = useState<number>(0);
 
   function randomChoice(i: number) {
     let currentSelection = i;
     // eslint-disable-next-line eqeqeq
     while (currentSelection == i) {
-      currentSelection = Math.floor(Math.random() * data.mindfulcards.length)
+      currentSelection = Math.floor(Math.random() * mindfulcards.length)
     }
     return currentSelection;
   }
@@ -28,7 +27,7 @@ function Downwind() {
   function newSelection() {
     let newIndex = randomChoice(currentSelection)
     // TODO: user feedback or async state
-    setQuote(data.mindfulcards[newIndex]);
+    setQuote(mindfulcards[newIndex]);
     setIndex(newIndex)
   }
 
@@ -98,6 +97,27 @@ function Downwind() {
     }
   }, [completed, action_start])
 
+  useEffect(() => {
+    async function getMindfulcards() {
+      if (mindfulcards.length === 0) {
+        // TODO: loading comp
+        const response = await fetch('http://127.0.0.1:8000/mindfulcards')
+        const data = await response.json()
+
+        if (data.status === "success") {
+          const cards = data.data;
+          let mf_len = cards.length
+          let randIndex = Math.floor(Math.random() * mf_len)
+          setMindfulcards(cards)
+          setQuote(cards[randIndex])
+          setIndex(randIndex)
+        }
+      }
+    }
+
+    getMindfulcards()
+  }, [mindfulcards])
+
   return (
     <div className="mainPage">
       <HeaderItem title="Downwind" />
@@ -150,5 +170,3 @@ function Downwind() {
     </div>
   )
 }
-
-export default Downwind;
