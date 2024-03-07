@@ -6,66 +6,72 @@ import HeaderItem from "../../../components/HeaderItem"
 import './conversations.css'
 import { PaperPlaneOutline } from "react-ionicons"
 import useAppUser from "../../../data/use-app-user"
+import toast from "react-hot-toast"
+import { postData } from "../../../data/interval"
 
 const randomWelcome = ['Hi', 'How can i help', 'How are you doing today']
 const backendUrl = 'http://127.0.0.1:8000'
 export default function Conversation() {
   const params = useParams()
   const navigate = useNavigate()
-  const { appUser, updateUserListener }: { appUser: AppUser, updateUserListener: Function } = useAppUser()
-  // TODO: random comp intro
+  const { appUser, access_token, updateUserListener } = useAppUser()
+
   const [convId, setConvId] = useState('');
-  const [conversations, updateConversations] = useState<string[]>([randomWelcome[Math.round(Math.random() * randomWelcome.length - 1)]])
+  const [conversations, updateConversations] = useState<string[]>([randomWelcome[Math.ceil(Math.random() * randomWelcome.length - 1)]])
   const [waiting_reply, setWatingStatus] = useState(false)
   const [userInput, updateUserInput] = useState("")
 
 
-  // TODO: save to file
-  function processSubmit() {
+  async function processSubmit() {
     setWatingStatus(true)
+    const toastId = toast.loading('Waiting for reply')
 
-    const postData = { message: userInput }
-    axios.post(`${backendUrl}/response`, postData).then(response => {
+    const formData = { message: userInput, userId: appUser.userId }
+    const response = await postData(`${backendUrl}/response`, formData, { "Authorization": `Bearer ${access_token}` })
+    if (response.status === "success") {
       // do something with response
-      console.log(response.data)
-      updateConversations([...conversations, userInput, response.data])
+      console.log("responded")
+      updateConversations([...conversations, userInput, response.message])
       updateUserInput("")
       setWatingStatus(false)
-    })
+      toast.remove(toastId)
+    }
   }
 
   useEffect(() => {
     if (convId === '') {
-      if (params?.convId) {
+      if (params.convId) {
         if (params.convId !== '0') {
           setConvId(params.convId)
-          let saved_conversations = appUser.conversations.find(x => x.convId === params.convId)
+          let saved_conversations = appUser.conversations.find((x: any) => x.convId === params.convId)
           if (saved_conversations) {
             updateConversations(saved_conversations.messages);
           } else {
             navigate('/404')
           }
+        } else {
+          setConvId(uuidv4())
         }
-      } else {
-        setConvId(uuidv4())
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [convId, params.convId])
 
   useEffect(() => {
-    const updateConvo = setInterval(() => {
+    async function saveConversation() {
       if (conversations.length > 2) {
         let json_msg = JSON.stringify(conversations)
-        const postData = { userId: params.userid, message: json_msg, convId: convId }
-        axios.post(`${backendUrl}/save_conversation`, postData).then(response => {
-          if (response.status === 200) {
-            updateUserListener(true)
-          }
-          console.log(response.data)
-        })
+        const formData = { userId: params.userid, message: json_msg, convId: convId }
+        const response = await postData(`${backendUrl}/save_conversation`, formData, { "Authorization": `Bearer ${access_token}` })
+        if (response.status === "success") {
+          updateUserListener(true)
+          toast.success("conversation autosaved!", { icon: "💾" })
+          console.log("saved", [...response.data].length)
+        }
       }
-    }, 3000);
+    }
+
+    const updateConvo = setInterval(saveConversation, 3000);
 
     return () => clearInterval(updateConvo)
     // eslint-disable-next-line react-hooks/exhaustive-deps

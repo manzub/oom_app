@@ -20,7 +20,7 @@ import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [appLoaded, setAppLoaded] = useState(false)
-  const { loading, appUser, updateUserListener } = useAppUser();
+  const { loading, appUser } = useAppUser();
 
   useEffect(() => {
     if (!loading) {
@@ -41,7 +41,7 @@ function App() {
             <Route path='clearyoursht' element={<ClearYourSht />} />
             <Route path='forfutureself' element={<ForFutureSelf />} />
             <Route path='/conversations'>
-              <Route index element={<Conversations user={appUser} />} />
+              <Route index element={<Conversations />} />
               <Route path='conversation/:userid/:convId' element={<Conversation />} />
             </Route>
             <Route path='pawsnreflect' element={<PawsNReflect />} />
@@ -53,7 +53,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </React.Fragment>}
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }

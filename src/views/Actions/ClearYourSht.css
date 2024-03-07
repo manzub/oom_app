@@ -86,8 +86,3 @@ input[type="text"].message_input, .message_input:focus, .message_input::after {
   top: 0px;
   left: 0pc;
 }
-
-.placed {
-  /* color: red;
-  border: 1px solid red; */
-}

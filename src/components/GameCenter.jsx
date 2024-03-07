@@ -26,7 +26,7 @@ export default function GameCenter() {
 
     setToDelete(-1)
     const randomAffirms = ["Way to Go", "1 Item down", "Keep Going"]
-    toast.success(randomAffirms[Math.round(Math.random() * randomAffirms.length - 1)], { icon: "👏" })
+    toast.success(randomAffirms[Math.ceil(Math.random() * randomAffirms.length - 1)], { icon: "👏" })
     console.log('popped', sht.length)
 
     if (items.length === 0) {
