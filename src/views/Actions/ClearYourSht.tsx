@@ -4,6 +4,7 @@ import HeaderItem from "../../components/HeaderItem";
 import "./ClearYourSht.css"
 import { CheckmarkOutline, CloseOutline } from "react-ionicons";
 import GameCenter from "../../components/GameCenter";
+import toast from "react-hot-toast";
 
 function ClearYourSht() {
 
@@ -39,18 +40,21 @@ function ClearYourSht() {
     setConversation([...current_conversation_chain, { message: 'Good Job' }])
     setRunning(false)
     setGameStart(true)
+    toast.success('Here is everything bothering you atm.\nDrag and Drop them in the Bin to clear.\nStart', { icon: "🎮" })
   }
 
   const [game_start, setGameStart] = useState(false);
-  
+
 
   useEffect(() => {
     if (running) {
       (conversation.length === 0) && setConversation([...conversation, { message: "What's bugging you?" }])
 
       if (conversation.length > 1 && (conversation.length % 2) === 0) { //waiting for bot reply
+        const toastId = toast.loading('Waiting for reply...')
         setWatingStatus(false)
         setTimeout(() => {
+          toast.dismiss(toastId)
           setConversation([...conversation, { message: conversation.length === 2 ? 'Admittance is the first step to progress. Anything else?' : 'Keep Writing?', needs_action: true }])
         }, 1000);
       }

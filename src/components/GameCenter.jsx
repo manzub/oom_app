@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { TrashOutline } from "react-ionicons";
 import Affirmations from "./Affirmations";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function GameCenter() {
   const navigate = useNavigate()
@@ -24,10 +25,13 @@ export default function GameCenter() {
     }
 
     setToDelete(-1)
+    const randomAffirms = ["Way to Go", "1 Item down", "Keep Going"]
+    toast.success(randomAffirms[Math.round(Math.random() * randomAffirms.length - 1)], { icon: "👏" })
     console.log('popped', sht.length)
 
-    if(items.length == 0) {
+    if (items.length === 0) {
       setCompleted(true)
+      toast.success("Done!", { icon: "👏" })
     }
   }
 
@@ -49,7 +53,7 @@ export default function GameCenter() {
   useEffect(() => {
     // let parent = document.querySelector(".gameItems")
     let trashItems = document.querySelectorAll(".trashItem")
-    for(let i = 0; i < trashItems.length; i++) { //width in str
+    for (let i = 0; i < trashItems.length; i++) { //width in str
       let pos_x = (Math.random() * (330 - 127)).toFixed() //parent.width - trashitem.width
       let pos_y = (Math.random() * (400 - 121)).toFixed() //parent.height - trashitem.height
       trashItems[i].style.left = `${pos_x - 20}px`

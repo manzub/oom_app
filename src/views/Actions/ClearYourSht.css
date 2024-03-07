@@ -79,6 +79,8 @@ input[type="text"].message_input, .message_input:focus, .message_input::after {
   padding: 10px 30px;
   border-radius: 30px;
   background-color: #FFC800;
+  border: 1px solid #242424;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
   margin: 2;
   font-size: xx-large;
   top: 0px;
