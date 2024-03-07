@@ -5,9 +5,9 @@ import "./Downwind.css"
 import { PauseSharp, PlayBackSharp, PlaySharp, RefreshSharp, StopSharp } from "react-ionicons";
 import Affirmations from "../../components/Affirmations";
 import ActionItem from "../../components/ActionItem";
+import toast from "react-hot-toast";
 
 // TODO: action state after popup
-// TODO: loading state for every comp
 export default function Downwind() {
 
   const [mindfulcards, setMindfulcards] = useState<MindfulQuote[]>([])
@@ -26,7 +26,7 @@ export default function Downwind() {
 
   function newSelection() {
     let newIndex = randomChoice(currentSelection)
-    // TODO: user feedback or async state
+    toast.success("Here's a new card!")
     setQuote(mindfulcards[newIndex]);
     setIndex(newIndex)
   }
@@ -100,7 +100,7 @@ export default function Downwind() {
   useEffect(() => {
     async function getMindfulcards() {
       if (mindfulcards.length === 0) {
-        // TODO: loading comp
+        // TODO: loading HUD
         const response = await fetch('http://127.0.0.1:8000/mindfulcards')
         const data = await response.json()
 
@@ -115,8 +115,14 @@ export default function Downwind() {
       }
     }
 
-    getMindfulcards()
-  }, [mindfulcards])
+    const promise = getMindfulcards()
+    toast.promise(promise, {
+      loading: "Fetching Cards!...",
+      success: "Done!",
+      error: "Oops! Unable to fetch cards"
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="mainPage">
