@@ -26,12 +26,10 @@ function ForFutureSelf() {
     let cleanedHtml = DOMPurify.sanitize(message);
     cleanedHtml = encodeURIComponent(cleanedHtml)
 
-    // TODO: topics
     const formData = { userId: appUser.userId, message: cleanedHtml, topic: topic }
     if (topics_options.includes(topic)) {
       const promise = postData(`${backendUrl}/send_love`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
         if (response.status === "success") {
-          // TODO: do something with response [alert user]
           updateUserListener(true)
           console.log(response)
           setMessage("")
