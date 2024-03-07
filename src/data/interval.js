@@ -32,5 +32,22 @@ export async function postData(url = "", data = {}, headers = {}) {
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data)
   })
+  if (response.status === 403) {
+    // TODO: renew token
+    fetchNewToken()
+  }
   return response.json()
+}
+
+async function fetchNewToken() {
+  const savedUser = JSON.parse(localStorage.getItem('_app_def_user_1.0'))
+  if (savedUser.userId) {
+    const response = await postData(`http://127.0.0.1:8000/auth/new_token?userId=${savedUser.userId}`)
+    if (response.status === "success") {
+      localStorage.setItem('_app_usr_access', JSON.stringify(response.data))
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000);
+    }
+  }
 }

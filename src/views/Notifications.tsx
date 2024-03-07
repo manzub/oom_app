@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react"
 import useAppUser from "../data/use-app-user"
-import { MailUnreadOutline, TrashOutline } from "react-ionicons";
 import { dateDiffInDays, postData } from "../data/interval";
-import axios from "axios";
 import NotificationItem from "../components/NotificationItem";
 
 const backendUrl = "http://127.0.0.1:8000/"
 export default function Notifications() {
-  const { appUser, access_token, updateUserListener }: { appUser: AppUser, access_token: string, updateUserListener: Function } = useAppUser();
+  const { appUser, access_token, updateUserListener } = useAppUser();
 
   // TODO: dialog component
-  const readNotifications = appUser.notifications.filter(x => x.is_read === true)
+  const readNotifications = appUser.notifications.filter((x: any) => x.is_read === true)
   const [notifications, setNotifications] = useState<AppUser["notifications"]>([])
   const [toBeDelivered, setTBD] = useState(0);
 
@@ -19,7 +17,7 @@ export default function Notifications() {
     postData(`${backendUrl}mark_noti_as_read`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
       if (response.status === "success") {
         // TODO: feedback message
-        updateUserListener()
+        updateUserListener(true)
       }
     })
   }
@@ -29,7 +27,7 @@ export default function Notifications() {
     postData(`${backendUrl}delete_noti_item`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
       if (response.status === "success") {
         // TODO: feedback message
-        updateUserListener()
+        updateUserListener(true)
       }
     })
   }
@@ -38,7 +36,7 @@ export default function Notifications() {
     if (appUser.notifications) {
       let unreadMessages: any[] = []
       let tbd = 0;
-      appUser.notifications.forEach(noti_item => {
+      appUser.notifications.forEach((noti_item: any) => {
         const noti_time = new Date(noti_item.created)
         const today_time = new Date()
         const diffDays = dateDiffInDays(noti_time, today_time)
@@ -69,23 +67,6 @@ export default function Notifications() {
       <span className="text-danger">!</span>
     </p>}
 
-    {appUser.notifications.length > 0 && <React.Fragment>
-      {readNotifications.length > 0 && <React.Fragment>
-        <div className="box shadow-sm bg-light mb-3">
-          <div className="box-title border-bottom p-3">
-            <h6 className="m-0">Older</h6>
-          </div>
-          <div className="box-body p-0">
-            {readNotifications.map((item, idx) => <NotificationItem item={item} callback={() => {
-              if (window.confirm('Delete this item?')) {
-                deleteNotiItem(item.notiId)
-              }
-            }} key={idx} />)}
-          </div>
-        </div>
-      </React.Fragment>}
-    </React.Fragment>}
-
     {notifications.length > 0 && <React.Fragment>
       <div className="box shadow-sm bg-light mb-3">
         <div className="box-title border-bottom p-3">
@@ -99,6 +80,23 @@ export default function Notifications() {
           }} key={idx} />)}
         </div>
       </div>
+    </React.Fragment>}
+
+    {appUser.notifications.length > 0 && <React.Fragment>
+      {readNotifications.length > 0 && <React.Fragment>
+        <div className="box shadow-sm bg-light mb-3">
+          <div className="box-title border-bottom p-3">
+            <h6 className="m-0">Older</h6>
+          </div>
+          <div className="box-body p-0">
+            {readNotifications.map((item: any, idx: number) => <NotificationItem item={item} callback={() => {
+              if (window.confirm('Delete this item?')) {
+                deleteNotiItem(item.notiId)
+              }
+            }} key={idx} />)}
+          </div>
+        </div>
+      </React.Fragment>}
     </React.Fragment>}
   </div>)
 }

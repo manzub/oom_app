@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { postData } from "./interval";
+import toast from "react-hot-toast";
 
 const appUserKey = '_app_def_user_1.0';
 const appUserToken = '_app_usr_access'
@@ -53,6 +54,7 @@ export default function useAppUser() {
     const listener = () => {
       if (!appUser || appUser === null) {
         setupOOMUser().then(_ => {
+          toast.success("Registered app user!")
           setLoadingState(true)
           setTimeout(() => {
             window.location.reload()
@@ -67,5 +69,5 @@ export default function useAppUser() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
-  return { loading, appUser, access_token: access_token.access_token, updateUserListener }
+  return { loading, appUser, access_token: access_token?.access_token, updateUserListener }
 }

@@ -16,6 +16,7 @@ import PawsNReflect from './views/Actions/PawsNReflect';
 import Journals from './views/Actions/Journals';
 import Notifications from './views/Notifications';
 import More from './views/More';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [appLoaded, setAppLoaded] = useState(false)
@@ -38,7 +39,7 @@ function App() {
             <Route index element={<Menu appUser={appUser} />} />
             <Route path='downwind' element={<Downwind />} />
             <Route path='clearyoursht' element={<ClearYourSht />} />
-            <Route path='forfutureself' element={<ForFutureSelf appUser={appUser} updateListener={updateUserListener} />} />
+            <Route path='forfutureself' element={<ForFutureSelf />} />
             <Route path='/conversations'>
               <Route index element={<Conversations user={appUser} />} />
               <Route path='conversation/:userid/:convId' element={<Conversation />} />
@@ -52,6 +53,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
         </Routes>
       </React.Fragment>}
+      <Toaster/>
     </div>
   );
 }

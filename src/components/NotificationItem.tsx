@@ -1,4 +1,4 @@
-import { TrashOutline } from "react-ionicons"
+import { MailUnreadOutline, TrashOutline } from "react-ionicons"
 
 export default function NotificationItem({ item, callback }: { item: any, callback: Function }) {
   return (<div className="p-3 d-flex align-items-center justify-content-between bg-light border-bottom osahan-post-header" style={{ width: '100%' }}>
@@ -9,7 +9,7 @@ export default function NotificationItem({ item, callback }: { item: any, callba
     <div className="ml-auto mb-auto">
       <div className="btn-group">
         <button onClick={() => callback()} type="button" className="btn btn-light btn-sm p-2 rounded dropdown-item">
-          <TrashOutline title="Mark as Read" width="20px" height="20px" />
+          {item.is_read ? <TrashOutline title="Delete Item" width="20px" height="20px" /> : <MailUnreadOutline title="Mark as Read" width="20px" height="20px" />}
         </button>
       </div>
       <br />

@@ -1,14 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DOMPurify from "dompurify";
-import axios from "axios";
 import HeaderItem from "../../components/HeaderItem";
 import Affirmations from "../../components/Affirmations";
+import { postData } from "../../data/interval";
+import useAppUser from "../../data/use-app-user";
+import toast from "react-hot-toast";
 
-function ForFutureSelf({ appUser, updateListener }: { appUser: AppUser, updateListener: Function }) {
+const backendUrl = "http://127.0.0.1:8000"
+function ForFutureSelf() {
+  const [topics_options, setTopicOptions] = useState<any[]>([])
   const [message, setMessage] = useState("");
   const [topic, setTopic] = useState("self-love");
   const [sent_success, setSendStatus] = useState(false)
 
+  const { appUser, access_token, updateUserListener } = useAppUser()
 
   function popOut() {
     setMessage("")
@@ -21,24 +26,43 @@ function ForFutureSelf({ appUser, updateListener }: { appUser: AppUser, updateLi
     let cleanedHtml = DOMPurify.sanitize(message);
     cleanedHtml = encodeURIComponent(cleanedHtml)
 
-    // save in database
-    // TODO: to protect endpoints and add auth
     // TODO: topics
-    const backendUrl = "http://127.0.0.1:8000/send_love"
-    const postData = { userId: appUser.userId, message: cleanedHtml, topic: topic }
-    axios.post(backendUrl, postData).then(response => {
-      // TODO: do something with response [alert user]
-      updateListener(true)
-      console.log(response.data)
-      // eslint-disable-next-line eqeqeq
-      if (response.data.response == 'Updated') {
-        setMessage("")
-        setTimeout(() => {
-          setSendStatus(true)
-        }, 1000);
-      }
-    })
+    const formData = { userId: appUser.userId, message: cleanedHtml, topic: topic }
+    if (topics_options.includes(topic)) {
+      const promise = postData(`${backendUrl}/send_love`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
+        if (response.status === "success") {
+          // TODO: do something with response [alert user]
+          updateUserListener(true)
+          console.log(response)
+          setMessage("")
+          setTimeout(() => {
+            setSendStatus(true)
+          }, 1000);
+        } else {
+          toast.error(response.message || "error occurred")
+        }
+      }).catch(error => toast.error("Oops! could not connect to backend"))
+      toast.promise(promise, {
+        loading: "Sending...",
+        success: "Done!.",
+        error: "Could not save"
+      })
+    } else {
+      toast.error('Please select a Topic!')
+    }
   }
+
+  useEffect(() => {
+    async function getTopics() {
+      if (topics_options.length === 0) {
+        const response = await (await fetch(`${backendUrl}/topics`)).json()
+        if (response.status === "success") {
+          setTopicOptions(response.data)
+        }
+      }
+    }
+    getTopics()
+  }, [topics_options])
 
   return (
     <div className="mainPage">
@@ -49,7 +73,8 @@ function ForFutureSelf({ appUser, updateListener }: { appUser: AppUser, updateLi
           <div className="card" style={{ width: "100%" }}>
             <div className="card-header">
               <select value={topic} onChange={(event) => setTopic(event.target.value)} className="form-select">
-                <option value="self-love">Self Love</option>
+                <option value="">Select Topic</option>
+                {topics_options.map(item => <option key={item} value={item}>{String(item).toUpperCase()}</option>)}
               </select>
             </div>
             <div className="card-body">
@@ -61,8 +86,8 @@ function ForFutureSelf({ appUser, updateListener }: { appUser: AppUser, updateLi
                 rows={8} cols={15} />
             </div>
           </div>
-          <button className="btn btn-lg btn-primary" onClick={sendLove}>send love</button>
-          <p className="text-center text-uppercase" style={{fontSize: "12px"}}>this message will be delivered <strong>tomorrow am</strong></p>
+          <button className="btn btn-lg btn-primary text-uppercase" onClick={sendLove}>send love</button>
+          <p className="text-center text-uppercase" style={{ fontSize: "12px" }}>this message will be delivered <strong>tomorrow am</strong></p>
         </div>
       </div>
 
