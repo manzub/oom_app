@@ -33,7 +33,7 @@ export async function postData(url = "", data = {}, headers = {}) {
     body: JSON.stringify(data)
   })
   if (response.status === 403) {
-    // TODO: renew token
+    // renew token
     fetchNewToken()
   }
   return response.json()

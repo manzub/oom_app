@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react"
 import GifItem from "../../components/GifItem"
 import HeaderItem from "../../components/HeaderItem"
 import classNames from "classnames"
+import toast from "react-hot-toast"
 
+// TODO: picture full width
 const giphyApiKey = "pM67eHfDVjFpy6qDAG3ll2TCtKbhHqsr"
 const chunkSize = 5
 export default function PawsNReflect() {
@@ -18,36 +20,43 @@ export default function PawsNReflect() {
   // load 20 gifs then splice into 3 sets each.
   // and create a image item component
   const giphyApi = "https://api.giphy.com/v1/gifs/search"
-  function getPawsGiphy({ offset = 0, limit = 21 }: { offset: number, limit: number }) {
-    axios.get(`${giphyApi}?api_key=${giphyApiKey}&limit=${limit}&offset=${offset}&q=cat-and-dog`).then(response => {
-      const giphys = response.data.data.map(function (item: any, idx: number) {
-        return {
-          id: item.id, gif: item.images.original.url,
-          title: item.title, type: item.type,
-          url: item.url, dims: { width: item.images.original.width, height: item.images.original.height }
-        }
-      })
-      const result = giphys.reduce((resultArray: any, item: any, index: number) => {
-        const chunkIndex = Math.floor(index / chunkSize)
-        if (!resultArray[chunkIndex]) {
-          resultArray[chunkIndex] = [] // start a new chunk
-        }
-        resultArray[chunkIndex].push(item)
-        return resultArray
-      }, [])
-
-      setGifs(result)
-      setCompleted([])
+  async function getPawsGiphy({ offset = 0, limit = 21 }: { offset: number, limit: number }) {
+    const response = await ((await fetch(`${giphyApi}?api_key=${giphyApiKey}&limit=${limit}&offset=${offset}&q=cat-and-dog`)).json())
+    const giphys = response.data.map(function (item: any, idx: number) {
+      return {
+        id: item.id, gif: item.images.original.url,
+        title: item.title, type: item.type,
+        url: item.url, dims: { width: item.images.original.width, height: item.images.original.height }
+      }
     })
+    const result = giphys.reduce((resultArray: any, item: any, index: number) => {
+      const chunkIndex = Math.floor(index / chunkSize)
+      if (!resultArray[chunkIndex]) {
+        resultArray[chunkIndex] = [] // start a new chunk
+      }
+      resultArray[chunkIndex].push(item)
+      return resultArray
+    }, [])
+
+    setGifs(result)
+    setCompleted([])
+    const toastId = toast.loading("Loading")
+    setTimeout(() => {
+      toast.remove(toastId)
+    }, 1000);
   }
 
   function loadMore() {
-    // TODO: loading async
     let offset = searchParams.limit
     let limit = searchParams.limit * 2
 
     updateSearchParams({ limit: limit, offset: offset })
-    getPawsGiphy({ offset, limit })
+    const promise = getPawsGiphy({ offset, limit })
+    toast.promise(promise, {
+      loading: "Loading...",
+      error: "Error occurred",
+      success: "Done!"
+    })
   }
 
   useEffect(() => {

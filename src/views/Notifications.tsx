@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react"
 import useAppUser from "../data/use-app-user"
 import { dateDiffInDays, postData } from "../data/interval";
 import NotificationItem from "../components/NotificationItem";
+import toast from "react-hot-toast";
 
+// TODO: dialog instead window.confirm
 const backendUrl = "http://127.0.0.1:8000/"
 export default function Notifications() {
   const { appUser, access_token, updateUserListener } = useAppUser();
 
-  // TODO: dialog component
   const readNotifications = appUser.notifications.filter((x: any) => x.is_read === true)
   const [notifications, setNotifications] = useState<AppUser["notifications"]>([])
   const [toBeDelivered, setTBD] = useState(0);
@@ -16,7 +17,7 @@ export default function Notifications() {
     const formData = { userId: appUser.userId, notiId }
     postData(`${backendUrl}mark_noti_as_read`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
       if (response.status === "success") {
-        // TODO: feedback message
+        toast.success("Marked as Read!")
         updateUserListener(true)
       }
     })
@@ -26,7 +27,7 @@ export default function Notifications() {
     const formData = { userId: appUser.userId, notiId }
     postData(`${backendUrl}delete_noti_item`, formData, { "Authorization": `Bearer ${access_token}` }).then(response => {
       if (response.status === "success") {
-        // TODO: feedback message
+        toast.success("Deleted!")
         updateUserListener(true)
       }
     })

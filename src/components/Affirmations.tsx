@@ -3,8 +3,6 @@ import "./Affirmations.css"
 import { useNavigate } from "react-router-dom"
 import classNames from "classnames"
 
-// TODO: affirmation color
-
 export default function Affirmations({ bgColor, emoji, title, textSize, footerText, popOut }: { bgColor: string, emoji: string, title: string, textSize?: string, footerText: string, popOut: Function }) {
   const navigate = useNavigate()
 
