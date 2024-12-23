@@ -9,6 +9,13 @@ A React.js-based mindfulness application designed to help users wind down and de
 - **User-Friendly Interface**: Intuitive design with seamless navigation.
 - **Real-Time Chat**: Communicate with the chatbot in real-time for personalized advice and support.
 
+## Demo
+
+
+https://github.com/user-attachments/assets/3d3e4c1f-7860-45bf-9cf7-193c415ec22f
+
+
+
 ## Tech Stack
 
 - **Frontend**: React.js
